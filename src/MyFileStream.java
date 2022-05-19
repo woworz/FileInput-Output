@@ -10,10 +10,27 @@ public class MyFileStream {
             byte[] down = new byte[40];
             int length;
             while ((length = fileIn.read(down)) != -1) {
-
+                for(int i=0;i < length; i++) {
+                    down[i] = (byte)  (down[i]^5);
+                }
+                fileOut.write(down, 0, length);
             }
-        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
             throw new RuntimeException("Not Found File");
+        } finally {
+            if(fileOut != null) {
+                try {
+                    fileOut.close();
+                } catch (IOException e) {
+                    throw new RuntimeException("Output Error");
+                }
+            } if (fileIn != null) {
+                try {
+                    fileIn.close();
+                } catch (IOException e) {
+                    throw new RuntimeException("Input Error");
+                }
+            }
         }
     }
 }
